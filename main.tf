@@ -1,4 +1,4 @@
-resource "azurerm_linux_virtual_machine" "" {
+resource "azurerm_linux_virtual_machine" "this" {
   name                = var.vm_name
   computer_name       = var.computer_name
   resource_group_name = var.resource_group_name
@@ -9,10 +9,11 @@ resource "azurerm_linux_virtual_machine" "" {
   proximity_placement_group_id = var.proximity_placement_group_id
   availability_set_id          = var.availability_set_id
   network_interface_ids        = var.network_interface_ids
+  admin_username               = var.admin_ssh_key_username
 
   admin_ssh_key {
     username   = var.admin_ssh_key_username
-    public_key = var.admin_ssh_key_public_key
+    public_key = tls_private_key.this.public_key_openssh
   }
 
   os_disk {
